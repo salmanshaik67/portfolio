@@ -4,7 +4,7 @@ import { credentials, profile, stack } from '../../data/portfolio';
 import { easeExpo } from '../../lib/motion';
 import { CopyButton } from '../ui/CopyButton';
 import { InlineChip } from '../ui/InlineChip';
-import { SpectrumStack } from './SpectrumStack';
+import { InfraOrbit } from './InfraOrbit';
 
 const rise = (delay: number) => ({
   initial: { opacity: 0, y: 18 },
@@ -103,8 +103,8 @@ export function Hero() {
           </span>
         </motion.div>
 
-        <div className="mt-10 md:mt-6">
-          <SpectrumStack />
+        <div className="mt-10 md:mt-8">
+          <InfraOrbit />
         </div>
 
         <StackStrip />
