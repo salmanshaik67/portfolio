@@ -6,10 +6,17 @@ Personal portfolio for Salman Shaik, Systems & Infrastructure Engineer.
 
 Built with React 18, TypeScript, Vite, Tailwind CSS, Framer Motion and Lucide icons.
 
+## Changing your email or location (no code)
+
+1. On GitHub, open the repo → **Settings → Secrets and variables → Actions → Variables tab → New repository variable**.
+2. Add `VITE_EMAIL` and/or `VITE_LOCATION` with the new value (or edit them later the same way).
+3. Go to **Actions → Deploy to GitHub Pages → Run workflow**. The live site updates in about a minute.
+
+Delete a variable to fall back to the default in `src/data/portfolio.ts` (`LOCATION`, `EMAIL`).
+
 ## Editing content
 
-All content lives in [`src/data/portfolio.ts`](src/data/portfolio.ts).
-Location and email are the two constants at the top of the content section (`LOCATION`, `EMAIL`).
+All other content lives in [`src/data/portfolio.ts`](src/data/portfolio.ts).
 To add a photo, put it in `public/` and set `profile.portrait` (for example `'/portrait.jpg'`).
 
 ## Commands

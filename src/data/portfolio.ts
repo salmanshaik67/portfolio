@@ -113,9 +113,13 @@ export type ProcessStep = { title: string; text: string; icon: LucideIcon };
 
 const linkedinUrl = 'https://www.linkedin.com/in/salmanshaik7770/';
 
-/** ✏️  Quick edits: change these two lines and the whole site updates. */
-const LOCATION = 'Hebron, KY (Willing to Relocate)';
-const EMAIL = 'salmanshaik7770@gmail.com';
+/**
+ * ✏️  Quick edits. Either change the defaults below, or — without touching code —
+ * set the GitHub repository variables VITE_LOCATION / VITE_EMAIL
+ * (Settings → Secrets and variables → Actions → Variables) and re-run the deploy.
+ */
+const LOCATION = import.meta.env.VITE_LOCATION?.trim() || 'Hebron, KY (Willing to Relocate)';
+const EMAIL = import.meta.env.VITE_EMAIL?.trim() || 'salmanshaik7770@gmail.com';
 
 export const profile: Profile = {
   name: 'Salman Shaik',

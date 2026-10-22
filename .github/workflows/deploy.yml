@@ -30,6 +30,8 @@ jobs:
       - run: npx vite build --base=/${{ github.event.repository.name }}/
         env:
           VITE_CONTACT_ENDPOINT: ${{ vars.VITE_CONTACT_ENDPOINT }}
+          VITE_LOCATION: ${{ vars.VITE_LOCATION }}
+          VITE_EMAIL: ${{ vars.VITE_EMAIL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
