@@ -5,7 +5,8 @@
  *  Content is taken from Salman Shaik's LinkedIn profile
  *  (linkedin.com/in/salmanshaik7770). Edit anything below and the whole site
  *  updates. Lines marked "Draft copy" were written for the site, not copied
- *  from LinkedIn — review them before publishing.
+ *  from LinkedIn — review them before publishing. Code snippets in the work
+ *  section are illustrative and labelled as such on the page.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -26,6 +27,7 @@ import {
   KeyRound,
   Linkedin,
   Lock,
+  Mail,
   Network,
   Search,
   Server,
@@ -42,141 +44,124 @@ import {
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
 
+export type SectionId = 'home' | 'work' | 'about' | 'skills' | 'experience' | 'contact';
 export type NavItem = { id: SectionId; label: string };
-export type SectionId = 'home' | 'about' | 'work' | 'skills' | 'experience' | 'contact';
-
 export type Social = { label: string; href: string; icon: LucideIcon; handle: string };
+export type Chip = { label: string; icon: LucideIcon };
 
 export type Profile = {
   name: string;
-  /** Short form used in the nav logo. */
-  initials: string;
   role: string;
   location: string;
   email: string;
-  /** Hero headline, one entry per line. Keep it short and bold. */
+  /** Hero headline, one entry per line. */
   headline: string[];
-  intro: string;
-  /** `open: true` shows a green "available" light; `false` shows a neutral cyan status light. */
-  availability: { open: boolean; label: string };
-  /** Small floating chips around the hero. */
-  heroChips: { label: string; icon: LucideIcon }[];
-  /** Optional path to a portrait in /public (e.g. "/portrait.jpg"). Leave empty to show the generated placeholder. */
-  portrait?: string;
-  portraitAlt: string;
+  /** Hero sub-line: text before the chips, the chips, then text after. */
+  introLead: string;
+  introChips: Chip[];
+  introTail: string;
+  status: string;
   socials: Social[];
 };
 
-export type ProjectArt = 'aurora' | 'signal' | 'terminal' | 'orbit' | 'shield';
+export type CodeLang = 'yaml' | 'python' | 'groovy' | 'bash';
 
 export type Project = {
   slug: string;
+  /** Short label used on the tab. */
+  tab: string;
+  icon: LucideIcon;
   title: string;
-  /** One sentence shown on the card. */
-  summary: string;
-  /** Longer text shown in the detail view. */
   description: string;
   category: string;
-  role: string;
+  context: string;
   year: string;
   tech: string[];
-  /** Primary external link. Omit when there is nothing public to link to. */
-  link?: { label: string; href: string };
-  sourceUrl?: string;
-  /** Generated cover art. No external images, nothing can 404. */
-  art: ProjectArt;
-  /** Three colours used by the generated art. */
-  palette: [string, string, string];
-  artAlt: string;
-  highlights: string[];
+  link: { label: string; href: string };
+  highlights: { title: string; text: string }[];
+  /** Illustrative snippet shown in the editor panel. */
+  file: string;
+  lang: CodeLang;
+  code: string[];
+  /** Lines printed when the visitor presses Run. */
+  output: string[];
+  /** Accent colour for the tab and highlight cards. */
+  accent: string;
 };
 
-export type SkillGroup = {
-  title: string;
-  blurb: string;
-  icon: LucideIcon;
-  skills: { label: string; icon: LucideIcon }[];
-};
+export type Impact = { value: string; label: string; detail: string; tone: 'green' | 'pink' | 'blue' | 'teal' | 'amber' | 'violet' | 'ink' };
 
-export type TimelineEntry = {
-  period: string;
-  role: string;
-  org: string;
-  summary: string;
-  /** Marks entries that still need replacing. Rendered with a visible badge. */
-  placeholder?: boolean;
-};
+export type SkillGroup = { title: string; blurb: string; icon: LucideIcon; tone: 'violet' | 'teal' | 'blue' | 'green' | 'amber'; skills: Chip[] };
+
+export type TimelineEntry = { period: string; role: string; org: string; summary: string; tile: 'lines' | 'ascii' | 'pattern' | 'bars' | 'grid'; tileLabel: string };
 
 export type ProcessStep = { title: string; text: string; icon: LucideIcon };
 
-/* ── Content ───────────────────────────────────────────────────────────── */
+/* ── Quick edits ───────────────────────────────────────────────────────── */
 
 const linkedinUrl = 'https://www.linkedin.com/in/salmanshaik7770/';
 
 /**
- * ✏️  Quick edits. Either change the defaults below, or — without touching code —
- * set the GitHub repository variables VITE_LOCATION / VITE_EMAIL
+ * ✏️  Either change the defaults below, or — without touching code — set the GitHub
+ * repository variables VITE_LOCATION / VITE_EMAIL
  * (Settings → Secrets and variables → Actions → Variables) and re-run the deploy.
  */
 const LOCATION = import.meta.env.VITE_LOCATION?.trim() || 'Hebron, KY (Willing to Relocate)';
 const EMAIL = import.meta.env.VITE_EMAIL?.trim() || 'salmanshaik7770@gmail.com';
 
+/* ── Content ───────────────────────────────────────────────────────────── */
+
 export const profile: Profile = {
   name: 'Salman Shaik',
-  initials: 'SS',
   role: 'Systems & Infrastructure Engineer',
   location: LOCATION,
   email: EMAIL,
-  headline: ['Engineering', "what's", 'next.'],
-  intro:
-    'I build, support and automate Linux and Windows Server environments across on-prem, AWS and Azure — with TLS/PKI automation, CI/CD and scripting that keep systems secure and running.',
-  availability: { open: false, label: 'Server Support Engineer at Jabil' },
-  heroChips: [
-    { label: 'Linux · Windows Server', icon: Server },
-    { label: 'AWS · Azure', icon: Cloud },
-    { label: 'Ansible · Jenkins', icon: Workflow },
-    { label: 'TLS / PKI automation', icon: ShieldCheck },
+  headline: ['Automating the Infrastructure', 'Teams Rely On Every Day.'],
+  introLead: 'Systems & Infrastructure Engineer building and automating',
+  introChips: [
+    { label: 'Linux', icon: Terminal },
+    { label: 'Windows Server', icon: Server },
+    { label: 'AWS', icon: Cloud },
+    { label: 'Azure', icon: Cloud },
+    { label: 'Ansible', icon: Workflow },
+    { label: 'Jenkins', icon: Zap },
   ],
-  portrait: '',
-  portraitAlt: 'Portrait of Salman Shaik',
-  socials: [
-    { label: 'LinkedIn', handle: 'in/salmanshaik7770', href: linkedinUrl, icon: Linkedin },
-  ],
+  introTail: 'and the TLS/PKI that keeps it all secure.',
+  status: 'Server Support Engineer at Jabil',
+  socials: [{ label: 'LinkedIn', handle: 'in/salmanshaik7770', href: linkedinUrl, icon: Linkedin }],
 };
 
 export const navItems: NavItem[] = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
   { id: 'work', label: 'Work' },
+  { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'contact', label: 'Contact' },
 ];
 
+/** Shown in the scrolling stack strip under the hero. */
+export const stack: Chip[] = [
+  { label: 'RHEL', icon: Terminal },
+  { label: 'Ubuntu', icon: Terminal },
+  { label: 'Windows Server', icon: Server },
+  { label: 'AWS EC2', icon: Cloud },
+  { label: 'Azure', icon: Cloud },
+  { label: 'Ansible', icon: Workflow },
+  { label: 'Terraform', icon: Container },
+  { label: 'Jenkins', icon: Zap },
+  { label: 'Python', icon: Code2 },
+  { label: 'PowerShell', icon: Terminal },
+  { label: 'OpenSSL', icon: Lock },
+  { label: 'ServiceNow', icon: Ticket },
+];
+
 export const about = {
-  /** Draft copy. */
-  statement: 'I automate the repetitive work so infrastructure stays secure, observable and quietly reliable.',
-  paragraphs: [
+  title: 'Meet Salman',
+  body: [
     'Systems & Infrastructure Engineer with 3+ years building, supporting and automating Linux and Windows Server environments across on-prem, AWS and Azure.',
-    'Currently a Server Support Engineer at Jabil (via Populus Group): enterprise server monitoring, log and alert triage, ServiceNow incident management, user access management and AWS/Azure operations. M.S. in Computer Science from Southern Illinois University.',
+    'Currently a Server Support Engineer at Jabil (via Populus Group): enterprise server monitoring, log and alert triage, ServiceNow incident management, user access management and AWS/Azure operations. M.S. in Computer Science from Southern Illinois University · authorized to work in the U.S.',
   ],
-  /** Draft copy. */
-  philosophy:
-    'If I have to do it twice, I script it. If it can break silently, I monitor it. And if someone else will run it, I document it.',
-  highlights: [
-    { title: 'TLS / PKI automation', text: '50+ certificates automated across Windows and Linux — ~90% fewer manual renewals.', icon: Lock },
-    { title: 'CI/CD pipelines', text: 'Groovy-based Jenkins pipelines with API triggers and Teams alerts — build time cut by 40%.', icon: GitBranch },
-    { title: 'Reliability & support', text: '200+ ServiceNow incidents and changes, 99.9% uptime, VDI migration for 500+ users.', icon: Activity },
-  ],
-  /** Featured-project and skill counts are computed; these come from the LinkedIn profile. */
-  stats: [
-    { value: '3+', label: 'Years in infrastructure' },
-    { value: '50+', label: 'TLS certificates automated' },
-  ],
-  floatingNotes: [
-    { label: 'Currently', value: 'Server Support · Jabil' },
-    { label: 'Based in', value: LOCATION },
-  ],
+  openTo: ['Systems Engineer', 'Infrastructure Engineer', 'Cloud / DevOps Engineer', 'SRE', 'IAM / PKI Engineer'],
 };
 
 const projectsPage = `${linkedinUrl}details/projects/`;
@@ -185,104 +170,209 @@ const experiencePage = `${linkedinUrl}details/experience/`;
 export const projects: Project[] = [
   {
     slug: 'tls-lifecycle',
+    tab: 'TLS / PKI',
+    icon: ShieldCheck,
     title: 'TLS Certificate Lifecycle',
-    summary: 'Automated TLS/SSL issuance and renewal across university Windows and Linux infrastructure.',
     description:
       'Automated TLS/SSL certificate issuance and renewal across university infrastructure: Ansible playbooks with win-acme for Windows servers, and Certbot with Bash for Linux servers.',
     category: 'Security',
-    role: 'Southern Illinois University, Carbondale',
+    context: 'Southern Illinois University, Carbondale',
     year: '2023–25',
     tech: ['Ansible', 'Certbot', 'win-acme', 'Sectigo', 'OpenSSL', 'Apache'],
     link: { label: 'On LinkedIn', href: projectsPage },
-    art: 'orbit',
-    palette: ['#3fd8f0', '#9b7bff', '#5b8cff'],
-    artAlt: 'Generated artwork: a glowing core ringed by orbit paths, suggesting a chain of trust.',
     highlights: [
-      "Deployed and managed 50+ certificates (Sectigo, Let's Encrypt) securing all critical services",
-      'Cut manual certificate renewals by ~90% and kept certificate-expiry incidents near zero',
-      'Built an automated SSL SAN request form in the team wiki and documented the TLS/PKI process',
+      { title: '50+ certificates', text: "Sectigo and Let's Encrypt, securing all critical services." },
+      { title: '~90% fewer renewals', text: 'Manual renewal work removed; expiry incidents near zero.' },
+      { title: 'Self-serve SAN requests', text: 'Automated request form and TLS/PKI docs in the team wiki.' },
     ],
+    file: 'renew-certs.yml',
+    lang: 'yaml',
+    code: [
+      '# Illustrative — renew every certificate, Linux and Windows',
+      '- hosts: web_linux',
+      '  become: true',
+      '  tasks:',
+      '    - name: Renew with Certbot',
+      '      command: certbot renew --quiet --deploy-hook "systemctl reload apache2"',
+      '',
+      '- hosts: web_windows',
+      '  tasks:',
+      '    - name: Renew with win-acme',
+      '      win_command: wacs.exe --renew --notaskupdate',
+    ],
+    output: [
+      '$ ansible-playbook renew-certs.yml',
+      'PLAY [web_linux] ************************',
+      'TASK [Renew with Certbot] ............ ok',
+      'PLAY [web_windows] **********************',
+      'TASK [Renew with win-acme] ...... changed',
+      'PLAY RECAP ........... failed=0  unreachable=0',
+      '✓ no certificates expiring in the next 30 days',
+    ],
+    accent: '#77dddd',
   },
   {
     slug: 'backup-restore-validation',
+    tab: 'Backup & Restore',
+    icon: Database,
     title: 'Backup & Restore Validation',
-    summary: 'Python + Jenkins automation that runs database backups and proves they actually restore.',
     description:
-      'Built a Python automation, integrated with Selenium and Jenkins, that runs database backups and restore tests for client websites — turning manual backup testing into a repeatable Jenkins job.',
+      'A Python automation, integrated with Selenium and Jenkins, that runs database backups and restore tests for client websites — turning manual backup testing into a repeatable Jenkins job.',
     category: 'Automation',
-    role: 'Southern Illinois University, Carbondale',
+    context: 'Southern Illinois University, Carbondale',
     year: '2023–25',
     tech: ['Python', 'Selenium', 'Jenkins', 'MySQL', 'Bash', 'Linux'],
     link: { label: 'On LinkedIn', href: projectsPage },
-    art: 'signal',
-    palette: ['#3fd8f0', '#5b8cff', '#f072d6'],
-    artAlt: 'Generated artwork: steady waveform lines on a dark grid with a floating uptime card.',
     highlights: [
-      'Automated restore validation with scheduled test restores and file-integrity checks',
-      'Cut system recovery time by 50% and reduced risk of data loss',
-      'Improved disaster-recovery readiness with a repeatable Jenkins job',
+      { title: 'Restores, proven', text: 'Scheduled test restores with file-integrity checks.' },
+      { title: '50% faster recovery', text: 'System recovery time cut in half; less risk of data loss.' },
+      { title: 'DR-ready', text: 'Disaster-recovery testing became a repeatable Jenkins job.' },
     ],
+    file: 'validate_restore.py',
+    lang: 'python',
+    code: [
+      '# Illustrative — a backup only counts if it restores',
+      'def validate_restore(db: str) -> bool:',
+      '    dump = backup(db)                      # timestamped mysqldump',
+      '    restore(dump, target=f"{db}_verify")',
+      '    return checksum(db) == checksum(f"{db}_verify")',
+      '',
+      'for site in client_sites():',
+      '    assert validate_restore(site.db), f"restore failed: {site.name}"',
+    ],
+    output: [
+      '$ python validate_restore.py',
+      'backup   site_db ............... ok',
+      'restore  site_db_verify ........ ok',
+      'checksum match ................. ok',
+      '✓ every backup restored and verified',
+    ],
+    accent: '#00bbff',
   },
   {
     slug: 'jenkins-site-automation',
+    tab: 'Fleet Config',
+    icon: Globe,
     title: 'Fleet Config Automation',
-    summary: 'Jenkins-driven configuration and plugin-compatibility testing across 70+ websites.',
     description:
       'Automated configuration and testing across client WordPress websites using Python, Selenium and the Jenkins remote API.',
     category: 'CI/CD',
-    role: 'Southern Illinois University, Carbondale',
+    context: 'Southern Illinois University, Carbondale',
     year: '2023–25',
     tech: ['Python', 'Selenium', 'Jenkins API', 'WordPress', 'Linux'],
     link: { label: 'On LinkedIn', href: projectsPage },
-    art: 'aurora',
-    palette: ['#5b8cff', '#9b7bff', '#3fd8f0'],
-    artAlt: 'Generated artwork: a frosted dashboard window with status rings and bar charts over flowing gradients.',
     highlights: [
-      'Rolled out WordPress 2FA plugin configuration to ~72 websites through Jenkins-triggered jobs',
-      'Automated plugin compatibility testing across 50+ client sites to catch conflicts before updates',
-      'Reduced plugin-related downtime incidents by 70% and cut manual testing effort by 50%',
+      { title: '~72 sites', text: '2FA plugin configuration rolled out through Jenkins-triggered jobs.' },
+      { title: '50+ sites tested', text: 'Plugin compatibility checked before every update.' },
+      { title: '70% fewer incidents', text: 'Plugin-related downtime down; manual testing halved.' },
     ],
+    file: 'rollout.py',
+    lang: 'python',
+    code: [
+      '# Illustrative — fan a job out across the whole fleet',
+      'import jenkins',
+      '',
+      'server = jenkins.Jenkins(JENKINS_URL, username=USER, password=TOKEN)',
+      'for site in sites:',
+      '    server.build_job("plugin-compat-test", {"SITE": site})',
+      '    server.build_job("wp-2fa-rollout", {"SITE": site})',
+    ],
+    output: [
+      '$ python rollout.py',
+      'queued plugin-compat-test for every site',
+      'compat: no blocking conflicts ......... ok',
+      'queued wp-2fa-rollout for every site',
+      '✓ rollout complete',
+    ],
+    accent: '#bb88ff',
   },
   {
     slug: 'jenkins-cicd',
+    tab: 'CI/CD',
+    icon: GitBranch,
     title: 'Jenkins CI/CD Pipelines',
-    summary: 'Groovy pipelines with REST triggers, Teams alerts and a Selenium regression suite.',
     description:
-      'As a Graduate Research Assistant, led automation for university IT infrastructure across 50+ internal services: CI/CD pipelines, regression testing and scripted server maintenance.',
+      'As a Graduate Research Assistant, led automation for university IT infrastructure across 50+ internal services: Groovy pipelines, regression testing and scripted server maintenance.',
     category: 'CI/CD',
-    role: 'Graduate Research Assistant · SIU',
+    context: 'Graduate Research Assistant · SIU',
     year: '2023–25',
     tech: ['Jenkins', 'Groovy', 'Python', 'Selenium', 'Bash', 'REST APIs'],
     link: { label: 'On LinkedIn', href: experiencePage },
-    art: 'terminal',
-    palette: ['#3fd8f0', '#5b8cff', '#9b7bff'],
-    artAlt: 'Generated artwork: a glass terminal window above a row of pipeline stages, all passing.',
     highlights: [
-      'Groovy-based Jenkins pipelines with REST API triggers and Microsoft Teams alerts — release velocity up 40%',
-      'Selenium + Python regression suite in the pipeline — regression testing time cut by 50%',
-      '15+ Bash scripts for health checks, backups and patching — 20+ engineering hours recovered per week',
+      { title: '40% faster releases', text: 'Groovy pipelines with REST triggers and Teams alerts.' },
+      { title: '50% less regression time', text: 'Selenium + Python suite running inside the pipeline.' },
+      { title: '20+ hrs/week back', text: '15+ Bash scripts for health checks, backups and patching.' },
     ],
+    file: 'Jenkinsfile',
+    lang: 'groovy',
+    code: [
+      '// Illustrative — test, deploy, tell the team',
+      'pipeline {',
+      '  agent any',
+      '  stages {',
+      "    stage('Test')   { steps { sh 'pytest tests/selenium' } }",
+      "    stage('Deploy') { steps { sh './deploy.sh' } }",
+      '  }',
+      '  post {',
+      '    failure { office365ConnectorSend message: "Build failed: ${env.JOB_NAME}" }',
+      '  }',
+      '}',
+    ],
+    output: [
+      '[Pipeline] stage (Test)',
+      'tests/selenium ........................ passed',
+      '[Pipeline] stage (Deploy)',
+      './deploy.sh ........................... done',
+      'Finished: SUCCESS',
+    ],
+    accent: '#ffcc66',
   },
   {
     slug: 'llm-security-research',
+    tab: 'LLM Security',
+    icon: Shield,
     title: 'Enterprise LLM Security',
-    summary: 'Research on security and privacy risks in enterprise LLM, RAG and agentic AI deployments.',
     description:
-      'Research internship on security and privacy in large language models for enterprise use, with a focus on safe deployment of retrieval-augmented generation and agentic AI.',
+      'Research internship on security and privacy in large language models for enterprise use, focused on safe deployment of retrieval-augmented generation and agentic AI.',
     category: 'Research',
-    role: 'Research Intern · SIU',
+    context: 'Research Intern · SIU',
     year: '2025–26',
     tech: ['Python', 'LLMs', 'RAG', 'Generative AI'],
     link: { label: 'On LinkedIn', href: experiencePage },
-    art: 'shield',
-    palette: ['#9b7bff', '#f072d6', '#3fd8f0'],
-    artAlt: 'Generated artwork: a luminous shield outline connected to a network of nodes.',
     highlights: [
-      'Analyzed security and privacy vulnerabilities in real-world enterprise LLM integrations',
-      'Prototyped secure infrastructure components for sensitive customer workflows',
-      'Proposed enterprise-grade LLM security strategies balancing privacy and usability',
+      { title: 'Threat analysis', text: 'Security and privacy gaps in real enterprise LLM integrations.' },
+      { title: 'Secure prototypes', text: 'Infrastructure components for sensitive customer workflows.' },
+      { title: 'Practical strategy', text: 'LLM security approaches balancing privacy and usability.' },
     ],
+    file: 'guarded_rag.py',
+    lang: 'python',
+    code: [
+      '# Illustrative — access-aware retrieval with guardrails',
+      'def guarded_answer(query: str, user: User) -> str:',
+      '    docs = retriever.search(query, acl=user.groups)',
+      '    context = redact_pii(docs)',
+      '    answer = llm.generate(query, context)',
+      '    return policy_check(answer)',
+    ],
+    output: [
+      '$ python guarded_rag.py',
+      'retrieve (acl filtered) ............ ok',
+      'redact pii ......................... ok',
+      'policy check ....................... ok',
+      '✓ answer returned within policy',
+    ],
+    accent: '#f07a8a',
   },
+];
+
+/** Numbers from the LinkedIn profile. */
+export const impact: Impact[] = [
+  { value: '50+', label: 'TLS certificates automated', detail: '~90% fewer manual renewals', tone: 'green' },
+  { value: '200+', label: 'Incidents & changes resolved', detail: 'SLA compliance up 15% in ServiceNow', tone: 'pink' },
+  { value: '99.9%', label: 'Platform availability', detail: '24/7 server health monitoring', tone: 'blue' },
+  { value: '40%', label: 'Faster releases', detail: 'Groovy-based Jenkins pipelines', tone: 'teal' },
+  { value: '20+', label: 'Hours saved every week', detail: '15+ Bash/Python automation scripts', tone: 'amber' },
+  { value: '500+', label: 'Users migrated to VDI', detail: 'Hardware overhead down 20%', tone: 'violet' },
 ];
 
 export const skillGroups: SkillGroup[] = [
@@ -290,6 +380,7 @@ export const skillGroups: SkillGroup[] = [
     title: 'Systems',
     blurb: 'Linux and Windows Server, from build to patch.',
     icon: ServerCog,
+    tone: 'violet',
     skills: [
       { label: 'Linux (RHEL · Fedora · Ubuntu)', icon: Terminal },
       { label: 'Windows Server', icon: Server },
@@ -302,6 +393,7 @@ export const skillGroups: SkillGroup[] = [
     title: 'Cloud & identity',
     blurb: 'AWS and Azure operations with access done right.',
     icon: Cloud,
+    tone: 'teal',
     skills: [
       { label: 'AWS (EC2)', icon: Cloud },
       { label: 'Azure (AZ-900)', icon: Cloud },
@@ -313,6 +405,7 @@ export const skillGroups: SkillGroup[] = [
     title: 'Automation & CI/CD',
     blurb: 'Pipelines and playbooks instead of checklists.',
     icon: Workflow,
+    tone: 'blue',
     skills: [
       { label: 'Ansible', icon: Workflow },
       { label: 'Jenkins', icon: Zap },
@@ -325,6 +418,7 @@ export const skillGroups: SkillGroup[] = [
     title: 'Scripting',
     blurb: 'Small tools that save hours every week.',
     icon: Braces,
+    tone: 'green',
     skills: [
       { label: 'Python', icon: Code2 },
       { label: 'Bash', icon: Terminal },
@@ -336,6 +430,7 @@ export const skillGroups: SkillGroup[] = [
     title: 'Security & operations',
     blurb: 'Keep it encrypted, monitored and ticketed.',
     icon: Shield,
+    tone: 'amber',
     skills: [
       { label: 'TLS/SSL & PKI', icon: KeyRound },
       { label: 'OpenSSL', icon: Lock },
@@ -353,6 +448,8 @@ export const timeline: TimelineEntry[] = [
     org: 'Jabil · Contract via Populus Group',
     summary:
       'Monitor and support Windows and Linux servers, troubleshoot OS, software and network issues, manage incidents in ServiceNow, and support AWS and Azure operations with Python and SQL automation.',
+    tile: 'lines',
+    tileLabel: 'ONLINE',
   },
   {
     period: 'Aug 2025 — Jun 2026',
@@ -360,6 +457,8 @@ export const timeline: TimelineEntry[] = [
     org: 'Southern Illinois University, Carbondale',
     summary:
       'Researched security and privacy in enterprise LLM integrations, prototyped secure infrastructure components and explored safe RAG and agentic AI deployment.',
+    tile: 'ascii',
+    tileLabel: 'LLM SEC',
   },
   {
     period: 'Jul 2025 — Aug 2025',
@@ -367,6 +466,8 @@ export const timeline: TimelineEntry[] = [
     org: 'Southern Illinois University, Carbondale',
     summary:
       'Automated the end-to-end TLS certificate lifecycle with Ansible, Certbot and win-acme, co-built Python REST APIs for provisioning (40% faster spin-up) and enforced IAM and role-based access.',
+    tile: 'pattern',
+    tileLabel: 'TLS',
   },
   {
     period: 'Sep 2023 — May 2025',
@@ -374,6 +475,8 @@ export const timeline: TimelineEntry[] = [
     org: 'Southern Illinois University, Carbondale',
     summary:
       'Led automation for 50+ internal services: Jenkins CI/CD pipelines, TLS/SSL deployment, Selenium regression testing, 15+ Bash automation scripts and secure PHP/CodeIgniter modules.',
+    tile: 'bars',
+    tileLabel: 'CI/CD',
   },
   {
     period: 'Jan 2022 — Jan 2023',
@@ -381,27 +484,42 @@ export const timeline: TimelineEntry[] = [
     org: 'AKNEV Solutions · Hyderabad, India',
     summary:
       'L2/L3 support: resolved 200+ incidents and changes in ServiceNow (SLA compliance up 15%), sustained 99.9% availability and migrated monitoring to VDI for 500+ users.',
+    tile: 'grid',
+    tileLabel: '99.9%',
   },
 ];
 
 export const credentials = [
-  { title: 'M.S. Computer Science', issuer: 'Southern Illinois University · 3.9 GPA' },
-  { title: 'Microsoft Certified: Azure Fundamentals (AZ-900)', issuer: 'Microsoft' },
-  { title: 'DevOps Foundations', issuer: 'LinkedIn Learning · 2025' },
-  { title: 'Agile Methodology', issuer: 'Cognizant · 2023' },
+  { title: 'M.S. Computer Science', issuer: 'Southern Illinois University · 3.9 GPA', code: 'M.S.' },
+  { title: 'Azure Fundamentals', issuer: 'Microsoft Certified · AZ-900', code: 'AZ-900' },
+  { title: 'DevOps Foundations', issuer: 'LinkedIn Learning · 2025', code: 'DEVOPS' },
+  { title: 'Agile Methodology', issuer: 'Cognizant · 2023', code: 'AGILE' },
 ];
 
 /** Draft copy. */
 export const process: ProcessStep[] = [
-  { title: 'Observe', text: 'Monitoring, logs and alerts first — know what normal looks like.', icon: Activity },
-  { title: 'Diagnose', text: 'Follow the evidence to the root cause, not the loudest symptom.', icon: Search },
-  { title: 'Automate', text: 'Script it, pipeline it, schedule it — remove the manual step.', icon: Workflow },
-  { title: 'Harden', text: 'Certificates, access and patching handled before they become incidents.', icon: ShieldCheck },
-  { title: 'Document', text: 'Runbooks and wikis so the next engineer is never starting from zero.', icon: FileText },
+  { title: 'Observe', text: 'Monitoring, logs and alerts first.', icon: Activity },
+  { title: 'Diagnose', text: 'Follow evidence to the root cause.', icon: Search },
+  { title: 'Automate', text: 'Script it, pipeline it, schedule it.', icon: Workflow },
+  { title: 'Harden', text: 'Certificates, access and patching.', icon: ShieldCheck },
+  { title: 'Document', text: 'Runbooks the next engineer can trust.', icon: FileText },
+];
+
+/** Draft copy. */
+export const manifesto =
+  'If I have to do it twice, I script it. If it can break silently, I monitor it. If someone else will run it, I document it. Infrastructure should be the quietest part of everyone’s day.';
+
+/** Chips in the gradient banner. */
+export const bannerChips: Chip[] = [
+  { label: 'Linux', icon: Terminal },
+  { label: 'Cloud', icon: Cloud },
+  { label: 'CI/CD', icon: GitBranch },
+  { label: 'PKI', icon: KeyRound },
 ];
 
 export const contact = {
-  headline: ['Have something', 'extraordinary', 'in mind?'],
+  headline: "Let's build infrastructure that just works",
   blurb:
     "Hiring for systems, infrastructure, cloud/DevOps, SRE or IAM/PKI work — or need a hand automating something? Send a note and I'll get back to you.",
+  emailIcon: Mail,
 };

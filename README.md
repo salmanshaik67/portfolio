@@ -4,7 +4,7 @@ Personal portfolio for Salman Shaik, Systems & Infrastructure Engineer.
 
 **Live:** https://salmanshaik67.github.io/portfolio/
 
-Built with React 18, TypeScript, Vite, Tailwind CSS, Framer Motion and Lucide icons.
+Built with React 18, TypeScript, Vite, Tailwind CSS, Framer Motion and Lucide icons. Visual design inspired by photon.codes (black canvas, spectrum gradient, pill buttons, interactive code panel).
 
 ## Changing your email or location (no code)
 

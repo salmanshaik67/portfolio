@@ -1,41 +1,63 @@
-import { ArrowUp } from 'lucide-react';
 import { navItems, profile } from '../data/portfolio';
+import { LogoMark } from './ui/Logo';
+
+const linkedin = profile.socials.find((s) => s.label === 'LinkedIn');
 
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative border-t border-white/[0.06] px-5 pb-10 pt-16 md:px-10">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="font-display text-[clamp(2.5rem,8vw,6rem)] font-semibold uppercase leading-none tracking-tightest text-outline">
-              {profile.name}
-            </p>
-            <p className="mt-3 text-sm text-fg-muted">
-              {profile.role} · {profile.location}
-            </p>
-          </div>
+    <footer className="border-t border-white/[0.06] px-4 pb-8 pt-14 md:px-6">
+      <div className="mx-auto grid max-w-[1400px] gap-10 md:grid-cols-[1fr_auto]">
+        <div className="space-y-5">
+          <LogoMark className="h-7 w-7" />
+          <p className="max-w-xs text-sm text-fg-subtle">
+            {profile.name} — {profile.role}.
+          </p>
+          <p className="flex items-center gap-2 text-xs text-emerald-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+            Currently: {profile.status}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
           <nav aria-label="Footer">
-            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <p className="label !text-white">Portfolio</p>
+            <ul className="mt-3 space-y-1 text-[13px]">
               {navItems.map((n) => (
                 <li key={n.id}>
-                  <a href={`#${n.id}`} className="link-underline inline-flex min-h-[44px] items-center text-fg-muted hover:text-fg">
+                  <a href={`#${n.id}`} className="link-quiet inline-flex min-h-[32px] items-center lowercase">
                     {n.label}
                   </a>
                 </li>
               ))}
             </ul>
           </nav>
-        </div>
-        <div className="mt-12 flex flex-col-reverse gap-4 border-t border-white/[0.06] pt-6 text-xs text-fg-subtle sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {profile.name}. Built with React, Vite, Tailwind CSS and Framer Motion.
-          </p>
-          <a href="#home" className="inline-flex min-h-[44px] items-center gap-2 text-fg-muted hover:text-fg">
-            Back to top <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" />
-          </a>
+          <div>
+            <p className="label !text-white">Connect</p>
+            <ul className="mt-3 space-y-1 text-[13px]">
+              {linkedin && (
+                <li>
+                  <a href={linkedin.href} target="_blank" rel="noopener noreferrer" className="link-quiet inline-flex min-h-[32px] items-center">
+                    linkedin<span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </li>
+              )}
+              <li>
+                <a href={`mailto:${profile.email}`} className="link-quiet inline-flex min-h-[32px] items-center">
+                  email
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="label !text-white">Based in</p>
+            <p className="mt-3 max-w-[12rem] text-[13px] leading-relaxed text-fg-subtle">{profile.location}</p>
+          </div>
         </div>
       </div>
+      <p className="mx-auto mt-12 max-w-[1400px] text-[11px] text-fg-subtle">
+        © {year} {profile.name}. Built with React, Vite, Tailwind CSS and Framer Motion. Design inspired by photon.codes.
+      </p>
     </footer>
   );
 }

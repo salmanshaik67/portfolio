@@ -2,7 +2,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } fr
 import { ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 
-/** Top scroll-progress bar and a back-to-top button that appears after the hero. */
+/** Spectrum scroll-progress bar and a back-to-top pill that appears after the hero. */
 export function ScrollChrome() {
   const { scrollYProgress, scrollY } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
@@ -12,23 +12,19 @@ export function ScrollChrome() {
 
   return (
     <>
-      <motion.div
-        aria-hidden="true"
-        className="fixed inset-x-0 top-0 z-[70] h-[2px] origin-left bg-gradient-to-r from-cyan via-electric to-violet"
-        style={{ scaleX }}
-      />
+      <motion.div aria-hidden="true" className="spectrum-x fixed inset-x-0 top-0 z-[70] h-[2px] origin-left" style={{ scaleX }} />
       <AnimatePresence>
         {showTop && (
           <motion.a
             href="#home"
             aria-label="Back to top"
-            className="glass-strong fixed bottom-5 right-5 z-50 grid h-12 w-12 place-items-center rounded-full text-fg transition-colors hover:border-white/25 md:bottom-8 md:right-8"
-            initial={{ opacity: 0, y: 16, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.9 }}
-            transition={{ duration: 0.35 }}
+            className="fixed bottom-5 right-5 z-50 grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-black/70 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black md:bottom-8 md:right-8"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.3 }}
           >
-            <ArrowUp className="h-5 w-5" aria-hidden="true" />
+            <ArrowUp className="h-4 w-4" aria-hidden="true" />
           </motion.a>
         )}
       </AnimatePresence>
